@@ -1,4 +1,5 @@
 " Enable true-color under tmux
+map <Space> <leader>
 if &term =~# '^screen'
     let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
@@ -19,6 +20,7 @@ Plug 'tpope/vim-sensible'   " Very sensible defaults
 "Plug 'rstacruz/vim-opinion' " Pretty sensible defaults
 
 " Pretty colors {{{
+Plug 'fwip/fairyfloss.vim'     " Very pretty
 Plug 'morhetz/gruvbox'         " Colorscheme of choice
 Plug 'tomasr/molokai'          " Other colors
 Plug 'jacoborus/tender.vim'    " Other colors
@@ -123,7 +125,7 @@ Plug 'mattn/gist-vim'                         " Quick post to gist
 Plug 'Chiel92/vim-autoformat'                 " Formats code with external programs
 "Plug 'ludovicchabant/vim-gutentags'           " Autogen tag files
 "Plug 'ajh17/VimCompletesMe'                   " lightweight completion plugin on <Tab>
-Plug 'zxqfl/tabnine-vim'                      " Robust 'machine-learning' completion engine
+"Plug 'zxqfl/tabnine-vim'                      " Robust 'machine-learning' completion engine
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " FZF -FuZzyFinder
 
@@ -147,7 +149,7 @@ Plug 'junegunn/limelight.vim'  " Show only current paragaph
 
 let g:tslime_always_current_session = 1
 let g:tslime_always_current_window = 1
-vmap <leader>ts <Plug>SendSelectionToTmux
+
 Plug 'jgdavey/tslime.vim'
 
 map <Leader>h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
@@ -182,12 +184,12 @@ Glaive coverage plugin[mappings]
 " }}}
 
 " Use the pretty colorscheme
-"colorscheme gruvbox
+colorscheme fairyfloss
 "colorscheme despacio
 "colorscheme molokai
 "colorscheme dichromatic
 "colorscheme 1989
-colorscheme onehalfdark
+"colorscheme onehalfdark
 
 " statusline config
 set statusline=%f\ %m  "file
@@ -202,10 +204,17 @@ let g:ragel_default_subtype = 'go'
 " Bindings {{{
 " Escape is too far away, my pinky would get sore!
 " So I just jam jk to exit insert mode.
-inoremap jk <Esc>
+" inoremap jk <Esc>
+" Update: I just rebound it to capslock in my OS
 " Custom leader
-let g:mapleader = '\<Space>'
-map <Space> <leader>
+let g:mapleader = ' '
+nnoremap <SPACE> <Nop>
+" map <Space> <leader>
+
+" Tslime bindings
+vmap <leader>ts <Plug>SendSelectionToTmux
+nmap <leader>ts <Plug>NormalModeSendToTmux
+nmap <leader>tv <Plug>SetTmuxVars
 
 set relativenumber
 set number
