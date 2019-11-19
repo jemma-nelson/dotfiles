@@ -58,11 +58,19 @@ Plug 'nathanaelkane/vim-indent-guides' " Visual indent guides
 " let g:syntastic_vim_vint_args = '--style'
 " " }}}
 
-Plug 'w0rp/ale'    " Async syntax checker {{{
+Plug 'dense-analysis/ale'    " Async syntax checker {{{
 let g:ale_history_log_output = 1
 let g:ale_sign_error = '⨉'
 let g:ale_sign_warning = '⚠'
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '']
+let g:ale_linters = {
+\  'javascript': ['standard'],
+\}
+let g:ale_fixers = {
+\   'javascript': [
+\       'standard',
+\   ],
+\}
 " }}}
 
 "Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}} " LSP client {{{
@@ -73,7 +81,7 @@ let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '']
 Plug 'jneen/ragel.vim'         " Better ragel support
 Plug 'sheerun/vim-polyglot'    " A whole bunch of language packs (indentation + syntax)
 Plug 'pangloss/vim-javascript' " Better JS support
-Plug 'vim-scripts/bats.vim'                " Bash Automated Testing System
+Plug 'aliou/bats.vim'                " Bash Automated Testing System
 Plug 'fatih/vim-go'            " Go support {{{
   let g:go_fmt_command = "goimports"
   let g:go_def_mode = 'gopls'
@@ -184,7 +192,7 @@ Glaive coverage plugin[mappings]
 " }}}
 
 " Use the pretty colorscheme
-colorscheme fairyfloss
+colorscheme onehalfdark
 "colorscheme despacio
 "colorscheme molokai
 "colorscheme dichromatic
@@ -220,8 +228,10 @@ set relativenumber
 set number
 
 " space-F to format the file
-nnoremap <leader>f :Autoformat<CR>
-vnoremap <leader>f :Autoformat<CR>
+"nnoremap <leader>f :Autoformat<CR>
+"vnoremap <leader>f :Autoformat<CR>
+
+nnoremap <leader>f <Plug>(ale_fix)
 
 " vim-wiki diary
 nmap <leader>wj <Plug>VimwikiMakeDiaryNote
