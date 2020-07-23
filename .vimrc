@@ -8,6 +8,12 @@ set termguicolors
 set background=dark
 let g:gruvbox_contrast_dark='hard'
 
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 " Plugins go inside this section
 call plug#begin('~/.vim/plugged') " {{{
 
@@ -92,6 +98,7 @@ Plug 'pest-parser/pest.vim'    " Peg syntax
 
 Plug 'jakwings/vim-pony' " Pony syntax
 "Plug 'gf3/peg.vim'       " PEG syntax
+"
 
 
 let g:rustfmt_autosave = 1
@@ -165,7 +172,7 @@ map <Leader>h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> t
       \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 " Not currently in use {{{
 " Plug 'zchee/deoplete-go', {'build': {'unix': 'make'}} " Go auto-completion?
-Plug 'dhruvasagar/vim-table-mode'                     " Formats tables nicely
+" Plug 'dhruvasagar/vim-table-mode'                     " Formats tables nicely
 " Plug 'guns/xterm-color-table.vim'                     " :XtermColorTable to show available colors
 " Plug 'benekastah/neomake'                             " Like syntastic, but async in neovim
 " Plug 'chrisbra/csv.vim'                               " CSV support, pretty handy.
@@ -203,6 +210,7 @@ colorscheme onehalfdark
 set statusline=%f\ %m  "file
 set statusline+=%=     "right-align
 set statusline+=%l/%L  "line num
+set statusline+=-%c
 "set statusline+=\ %#Error#%{ALEGetStatusLine()}%#*  "ALE results
 
 set grepprg=rg\ --vimgrep   " Use ripgrep, it's fast
@@ -215,14 +223,15 @@ let g:ragel_default_subtype = 'go'
 " inoremap jk <Esc>
 " Update: I just rebound it to capslock in my OS
 " Custom leader
-let g:mapleader = ' '
+
+let g:mapleader = '\<Space>'
 nnoremap <SPACE> <Nop>
-" map <Space> <leader>
 
 " Tslime bindings
 vmap <leader>ts <Plug>SendSelectionToTmux
 nmap <leader>ts <Plug>NormalModeSendToTmux
 nmap <leader>tv <Plug>SetTmuxVars
+let g:mapleader = ' '
 
 set relativenumber
 set number
