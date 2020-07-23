@@ -6,7 +6,7 @@ module.exports = {
   config: {
     // choose either `'stable'` for receiving highly polished,
     // or `'canary'` for less polished but more frequent updates
-    updateChannel: "stable",
+    updateChannel: "canary",
 
     // default font size in pixels for all tabs
     fontSize: 16,
@@ -136,11 +136,20 @@ module.exports = {
 
     // Whether to use the WebGL renderer. Set it to false to use canvas-based
     // rendering (slower, but supports transparent backgrounds)
-    webGLRenderer: true
+    webGLRenderer: true,
 
     // for advanced config flags please refer to https://hyper.is/#cfg
 
     // Plugin config
+    monokaiDeluxe: {
+      borderWidth: "2px",
+      theme: "reloaded"
+    },
+
+    paneNavigation: {
+      showIndicators: false,
+      focusOnMouseHover: true
+    }
   },
 
   // a list of plugins to fetch and install from npm
@@ -150,12 +159,13 @@ module.exports = {
   //   `@company/project`
   //   `project#1.0.1`
   //plugins: ["hyperterm-summon", "hyper-monokai-deluxe", "hyper-cwd"],
-  plugins: ["hyper-monokai-deluxe", "hyper-cwd", "hyperterm-summon"],
+  //plugins: ["hyper-monokai-deluxe", "hyper-cwd", "hyperterm-summon"],
+  //plugins: ["hyper-monokai-deluxe", "hyper-pane"],
 
   // in development, you can create a directory under
   // `~/.hyper_plugins/local/` and include it here
   // to load it and avoid it being `npm install`ed
-  localPlugins: [],
+  localPlugins: ["hyper-pico-8"],
 
   keymaps: {
     // Example
