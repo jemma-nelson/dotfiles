@@ -7,6 +7,12 @@ set termguicolors
 set background=dark
 let g:gruvbox_contrast_dark='hard'
 
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+          \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 " Plugins go inside this section
 call plug#begin('~/.vim/plugged') " {{{
 
@@ -82,6 +88,7 @@ Plug 'pest-parser/pest.vim'    " Peg syntax
 
 Plug 'jakwings/vim-pony' " Pony syntax
 "Plug 'gf3/peg.vim'       " PEG syntax
+"
 
 
 let g:rustfmt_autosave = 1
@@ -123,7 +130,7 @@ Plug 'mattn/gist-vim'                         " Quick post to gist
 Plug 'Chiel92/vim-autoformat'                 " Formats code with external programs
 "Plug 'ludovicchabant/vim-gutentags'           " Autogen tag files
 "Plug 'ajh17/VimCompletesMe'                   " lightweight completion plugin on <Tab>
-Plug 'zxqfl/tabnine-vim'                      " Robust 'machine-learning' completion engine
+"Plug 'zxqfl/tabnine-vim'                      " Robust 'machine-learning' completion engine
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " FZF -FuZzyFinder
 
@@ -147,7 +154,6 @@ Plug 'junegunn/limelight.vim'  " Show only current paragaph
 
 let g:tslime_always_current_session = 1
 let g:tslime_always_current_window = 1
-vmap <leader>ts <Plug>SendSelectionToTmux
 Plug 'jgdavey/tslime.vim'
 
 map <Leader>h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
@@ -155,7 +161,7 @@ map <Leader>h :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> t
       \ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
 " Not currently in use {{{
 " Plug 'zchee/deoplete-go', {'build': {'unix': 'make'}} " Go auto-completion?
-Plug 'dhruvasagar/vim-table-mode'                     " Formats tables nicely
+" Plug 'dhruvasagar/vim-table-mode'                     " Formats tables nicely
 " Plug 'guns/xterm-color-table.vim'                     " :XtermColorTable to show available colors
 " Plug 'benekastah/neomake'                             " Like syntastic, but async in neovim
 " Plug 'chrisbra/csv.vim'                               " CSV support, pretty handy.
@@ -193,6 +199,7 @@ colorscheme onehalfdark
 set statusline=%f\ %m  "file
 set statusline+=%=     "right-align
 set statusline+=%l/%L  "line num
+set statusline+=-%c
 "set statusline+=\ %#Error#%{ALEGetStatusLine()}%#*  "ALE results
 
 set grepprg=rg\ --vimgrep   " Use ripgrep, it's fast
@@ -206,6 +213,8 @@ inoremap jk <Esc>
 " Custom leader
 let g:mapleader = '\<Space>'
 map <Space> <leader>
+nmap <leader>ts <Plug>NormalModeSendToTmux
+vmap <leader>ts <Plug>SendSelectionToTmux
 
 set relativenumber
 set number
