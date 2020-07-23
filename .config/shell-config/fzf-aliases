@@ -1,0 +1,71 @@
+#!/bin/bash
+if ! command -v fzf >/dev/null; then
+  exit 0
+fi
+
+if command -v fd >/dev/null; then
+  export FZF_DEFAULT_COMMAND='fd --type f'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+  # Use fd (https://github.com/sharkdp/fd) instead of the default find
+  # command for listing path candidates.
+  # - The first argument to the function ($1) is the base path to start traversal
+  # - See the source code (completion.{bash,zsh}) for the details.
+  _fzf_compgen_path() {
+    fd --hidden --follow --exclude ".git" . "$1"
+  }
+
+  # Use fd to generate the list for directory completion
+  _fzf_compgen_dir() {
+    fd --type d --hidden --follow --exclude ".git" . "$1"
+  }
+fi
+
+if command -v rg >/dev/null; then
+  # Use rg to find files, even faster than fd
+  export FZF_DEFAULT_COMMAND='rg --files'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
+
+# fe [FUZZY PATTERN] - Open the selected file with the default editor
+#   - Bypass fuzzy finder if there's only one match (--select-1)
+#   - Exit if there's no match (--exit-0)
+fe() {
+  local files
+  IFS=$'\n' files=($(fzf-tmux --query="$*" --multi --select-1 --exit-0))
+  [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
+}
+
+# fd - cd to selected directory
+#fd() {
+#  local dir
+#  dir=$(find ${1:-.} -path '*/\.*' -prune \
+#    -o -type d -print 2> /dev/null | fzf +m) \
+#    && cd "$dir"
+#}
+
+# fp - preview file with `head`
+fp() {
+  fzf --preview 'bat --style=numbers --color=always {} | head -100' "$@"
+}
+
+# vz - opens file in vim. Different from fe because it's interactive
+vz() {
+  vim $(fp --query=$1)
+}
+
+# ???
+zdo() {
+  local cmd=$1
+  shift
+  "$cmd" "$(fp --query="$*")"
+}
+
+
+#unalias z 2>/dev/null
+#z() {
+#echo hi
+#    [ $# -gt 0 ] && _z "$*" && return
+#      cd "$(_z -l 2>&1 | fzf --height 40% --nth 2.. --reverse --inline-info +s --tac --query "${*##-* }" | sed 's/^[0-9,.]* *//')"
+#}
+
