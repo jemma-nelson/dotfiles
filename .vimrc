@@ -66,8 +66,8 @@ Plug 'nathanaelkane/vim-indent-guides' " Visual indent guides
 
 Plug 'dense-analysis/ale'    " Async syntax checker {{{
 let g:ale_history_log_output = 1
-let g:ale_sign_error = '⨉'
-let g:ale_sign_warning = '⚠'
+let g:ale_sign_error = 'X'
+let g:ale_sign_warning = '!'
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '']
 let g:ale_linters = {
 \  'javascript': ['standard'],
@@ -75,6 +75,9 @@ let g:ale_linters = {
 let g:ale_fixers = {
 \   'javascript': [
 \       'standard',
+\   ],
+\   'python': [
+\       'black',
 \   ],
 \}
 " }}}
@@ -149,6 +152,11 @@ Plug 'Konfekt/FoldText'    " More informative folds
 
 Plug 'metakirby5/codi.vim' " Interactive shell in vim
 
+if has('mac')
+    Plug 'rizzatti/dash.vim' " Documentation for mac
+    nmap <silent> <leader>h <Plug>DashSearch
+endif
+
 " Plug 'vimwiki/vimwiki'     " Note taking {{{
 " let g:vimwiki_list = [{'path': '~/Google Drive/vimwiki/',
       " \ 'syntax': 'markdown', 'ext': '.md'}]
@@ -199,11 +207,12 @@ Glaive coverage plugin[mappings]
 " }}}
 
 " Use the pretty colorscheme
-colorscheme onehalfdark
+"colorscheme onehalfdark
 "colorscheme despacio
 "colorscheme molokai
 "colorscheme dichromatic
 "colorscheme 1989
+colorscheme gruvbox
 "colorscheme onehalfdark
 
 " statusline config
@@ -224,14 +233,16 @@ let g:ragel_default_subtype = 'go'
 " Update: I just rebound it to capslock in my OS
 " Custom leader
 
-let g:mapleader = '\<Space>'
-nnoremap <SPACE> <Nop>
+"let mapleader="\<Space>"
+" map <Space> <Leader>
+noremap <Space> <Nop>
+map <Space> <Leader>
+
 
 " Tslime bindings
-vmap <leader>ts <Plug>SendSelectionToTmux
-nmap <leader>ts <Plug>NormalModeSendToTmux
-nmap <leader>tv <Plug>SetTmuxVars
-let g:mapleader = ' '
+vmap <Leader>ts <Plug>SendSelectionToTmux
+nmap <Leader>ts <Plug>NormalModeSendToTmux
+nmap <Leader>tv <Plug>SetTmuxVars
 
 set relativenumber
 set number
@@ -240,7 +251,8 @@ set number
 "nnoremap <leader>f :Autoformat<CR>
 "vnoremap <leader>f :Autoformat<CR>
 
-nnoremap <leader>f <Plug>(ale_fix)
+nmap <Leader>f <Plug>(ale_fix)
+" nnoremap <Leader>f j
 
 " vim-wiki diary
 nmap <leader>wj <Plug>VimwikiMakeDiaryNote
@@ -250,6 +262,10 @@ noremap <ScrollWheelUp> <C-Y>
 noremap <ScrollWheelDown> <C-E>
 
 nmap <silent> <leader>d <Plug>DashSearch
+
+" fzf bindings
+
+nnoremap <leader>o :call fzf#run({'source': 'rg --files', 'sink': 'edit', 'left': '40%'})<CR>
 " }}}
 
 augroup vimrc
