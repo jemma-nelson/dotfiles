@@ -36,13 +36,13 @@ fe() {
   [[ -n "$files" ]] && ${EDITOR:-vim} "${files[@]}"
 }
 
-# fd - cd to selected directory
-#fd() {
-#  local dir
-#  dir=$(find ${1:-.} -path '*/\.*' -prune \
-#    -o -type d -print 2> /dev/null | fzf +m) \
-#    && cd "$dir"
-#}
+# fcd - cd to selected directory
+fcd() {
+  local dir
+  dir=$(fd ${1:-.} -path '*/\.*' -prune \
+    -o -type d -print 2> /dev/null | fzf +m) \
+    && cd "$dir"
+}
 
 # fp - preview file with `head`
 fp() {
@@ -59,6 +59,21 @@ zdo() {
   local cmd=$1
   shift
   "$cmd" "$(fp --query="$*")"
+}
+
+
+# fzgrep: pops up an interactive multi-select (use tab or shift-tab to select) from stdin
+fzgrep() {
+  fzf --multi "$@"
+}
+
+# fzgrep through squeue2 output, previewing the job info in the right-side pane
+fzq() {
+  squeue2 \
+    | tac \
+    | column -t \
+    | fzf --multi --no-sort \
+      --preview "echo {} | awk '{print \$1}' | xargs scontrol show job "
 }
 
 

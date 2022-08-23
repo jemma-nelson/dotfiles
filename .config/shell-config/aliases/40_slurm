@@ -1,0 +1,53 @@
+# vim: filetype=bash:
+
+alias squeue2="squeue -o '%.18i %.8P %.40j %.8u %.2t %.10M %.6D %R %E'"
+alias sacct2="sacct --format='jobID,JobName%30,Partition,State,ExitCode'"
+alias squall='squeue -o "%all"'
+alias superqueue="squeue -o '%all' | grep 'SuperIndex' | cut -f20,10,42,39,52,9,18 -d '|' --output-delimiter $'\t' | column -t -s $'\t'"
+alias fcq="squeue -o '%all' | grep '/net/seq/data/aggregations\|/net/seq/data/flowcells' | cut -f20,10,42,39,9,18 -d '|' --output-delimiter $'\t' | column -t -s $'\t'"
+
+# Function to update the assigned partition for many jobs at once
+# Example usage: squeue2 -u solexa | grep nf-split | head -n20 | qset queue0
+function sqset() {
+  local queue="$1"
+  if [[ -z "$queue" ]] ; then
+    echo "Usage: qset <queue>" >&2
+    return 1
+  fi
+  echo "reading jobs from stdin..." >&2
+  while read -r id rest ; do
+    if [[ "$id" != "JOBID" ]] ; then
+      scontrol update job "$id" partition="$queue"
+    fi
+  done
+}
+
+function sqalter() {
+  while read -r id rest ; do
+    if [[ "$id" != "JOBID" ]] ; then
+      scontrol update job "$id" "$@"
+    fi
+  done
+}
+
+function sqinfo() {
+  while read -r id rest ; do
+    if [[ "$id" != "JOBID" ]] ; then
+      scontrol show job "$id" "$@"
+    fi
+  done
+}
+
+# count CPU fullness
+function squsage() {
+  for i in hpc{A,B}{01..16} hpcz-00{01..16}; do
+    echo -n "$i "
+    scontrol show node $i \
+    | egrep 'CPU|State' \
+    | xargs \
+    | cut -d ' ' -f 1-5
+  done | column -t -s' '
+}
+
+# This doesn't work great. Biggest flaw is that hitting ctrl-c closes the shell.
+#alias besolexa='su - solexa -c "cd $(pwd); bash"'

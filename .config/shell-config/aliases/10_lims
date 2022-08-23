@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# LIMS_CLI_DIR=/home/nelsonjs/code/lims-cli/lims_cli/
+# LIMS_CLI=$LIMS_CLI_DIR/cli.py
+# 
+# lims-cli() (
+#   export DIRENV_LOG_FORMAT=
+#   direnv exec "$LIMS_CLI_DIR" python3 "$LIMS_CLI" "$@"
+# )
+
+lgo() {
+  dir=$(lims dir --guess "$1")
+  cd "$dir" || echo "Could not enter dir '${dir}'"
+}
+alias lcd=lgo

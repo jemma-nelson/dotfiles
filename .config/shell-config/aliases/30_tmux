@@ -1,0 +1,23 @@
+# vim: filetype=bash:
+
+#PROJECT_ROOT=/Volumes/projects
+#
+#function topen () {
+#  local t
+#  t=$1
+#  if tmux list-sessions -F "#S" | egrep -e "^$t" -q ; then
+#    tmux attach-session -t "$t"
+#  else
+#    tmux new-session -t "$t" -c "$PROJECT_ROOT/$t"
+#  fi
+#}
+
+function tattach () {
+  local session_name
+  local q=${1:-}
+  session_name=$(tmux list-sessions | fzf --nth 1 --query "$q" --select-1 | cut -d: -f1)
+  if [[ -n "$session_name" ]] ; then
+    tmux attach -t "$session_name"
+  fi
+}
+alias ta=tattach
