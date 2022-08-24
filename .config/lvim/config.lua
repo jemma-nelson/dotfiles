@@ -8,6 +8,14 @@ an executable
 ]]
 -- THESE ARE EXAMPLE CONFIGS FEEL FREE TO CHANGE TO WHATEVER YOU WANT
 
+-- GUI configuration
+if (vim.g.neovide) then
+  vim.o.guifont = "Monofur Nerd Font:h16"
+  vim.g.neovide_floating_blur_amount_x = 2.0
+  vim.g.neovide_floating_blur_amount_y = 2.0
+
+end
+
 -- general
 lvim.log.level = "warn"
 lvim.format_on_save = true
@@ -209,7 +217,7 @@ vim.filetype.add({
   },
 })
 
--- Disable evil plugins
+-- Disable plugins that I don't like
 lvim.builtin.autopairs.active = false
 
 -- Re-enable netrw

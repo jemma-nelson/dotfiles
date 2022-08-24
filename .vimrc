@@ -70,16 +70,17 @@ let g:ale_sign_error = 'X'
 let g:ale_sign_warning = '!'
 let g:ale_statusline_format = ['⨉ %d', '⚠ %d', '']
 let g:ale_linters = {
-\  'javascript': ['standard'],
+\  'javascript': ['eslint'],
 \}
 let g:ale_fixers = {
 \   'javascript': [
-\       'standard',
+\       'eslint',
 \   ],
 \   'python': [
 \       'black',
 \   ],
 \}
+let g:ale_rust_cargo_use_clippy = 1
 " }}}
 
 "Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}} " LSP client {{{
@@ -87,11 +88,11 @@ let g:ale_fixers = {
 "" }}}
 
 " Filetype support {{{
-Plug 'jneen/ragel.vim'         " Better ragel support
-Plug 'sheerun/vim-polyglot'    " A whole bunch of language packs (indentation + syntax)
-Plug 'pangloss/vim-javascript' " Better JS support
-Plug 'aliou/bats.vim'                " Bash Automated Testing System
-Plug 'fatih/vim-go'            " Go support {{{
+Plug 'jneen/ragel.vim'                              " Better ragel support
+Plug 'sheerun/vim-polyglot'                         " A whole bunch of language packs (indentation + syntax)
+Plug 'pangloss/vim-javascript'                      " Better JS support
+Plug 'aliou/bats.vim'                               " Bash Automated Testing System
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' } " Go support {{{
   let g:go_fmt_command = "goimports"
   let g:go_def_mode = 'gopls'
 " }}}
@@ -117,6 +118,10 @@ Plug 'ElmCast/elm-vim'         " Elm support
 
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
+
+" Unison support (unisonweb.org)
+Plug 'unisonweb/unison', { 'branch': 'trunk', 'rtp': 'editor-support/vim' }
+
 
 Plug 'othree/javascript-libraries-syntax.vim' " Angular stuff
 "Plug 'davidhalter/jedi-vim'                   " Python completion
@@ -146,6 +151,8 @@ Plug 'Chiel92/vim-autoformat'                 " Formats code with external progr
 "Plug 'zxqfl/tabnine-vim'                      " Robust 'machine-learning' completion engine
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " FZF -FuZzyFinder
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 
 Plug 'Konfekt/FastFold'    " Better folding performance
 Plug 'Konfekt/FoldText'    " More informative folds
@@ -233,8 +240,6 @@ let g:ragel_default_subtype = 'go'
 " Update: I just rebound it to capslock in my OS
 " Custom leader
 
-"let mapleader="\<Space>"
-" map <Space> <Leader>
 noremap <Space> <Nop>
 map <Space> <Leader>
 
