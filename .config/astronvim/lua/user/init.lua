@@ -11,8 +11,8 @@ local config = {
     remote = "origin", -- remote to use
     channel = "stable", -- "stable" or "nightly"
     version = "latest", -- "latest", tag name, or regex search like "v1.*" to only do updates before v2 (STABLE ONLY)
-    branch = "main", -- branch name (NIGHTLY ONLY)
-    commit = nil, -- commit hash (NIGHTLY ONLY)
+    --branch = "main", -- branch name (NIGHTLY ONLY)
+    --commit = nil, -- commit hash (NIGHTLY ONLY)
     pin_plugins = nil, -- nil, true, false (nil will pin plugins on stable only)
     skip_prompts = false, -- skip prompts about breaking changes
     show_changelog = true, -- show the changelog after performing an update
@@ -50,6 +50,7 @@ local config = {
     },
     g = {
       mapleader = " ", -- sets vim.g.mapleader
+      maplocalleader = " ", -- hopefully this sets localleader
       autoformat_enabled = true, -- enable or disable auto formatting at start (lsp.formatting.format_on_save must be enabled)
       cmp_enabled = true, -- enable completion at start
       autopairs_enabled = true, -- enable autopairs at start
@@ -57,7 +58,7 @@ local config = {
       status_diagnostics_enabled = true, -- enable diagnostics in statusline
       icons_enabled = true, -- disable icons in the UI (disable if no nerd font is available, requires :PackerSync after changing)
       ui_notifications_enabled = true, -- disable notifications when toggling UI elements
-      heirline_bufferline = true, -- enable new heirline based bufferline (requires :PackerSync after changing)
+      heirline_bufferline = false, -- enable new heirline based bufferline (requires :PackerSync after changing)
     },
   },
   -- If you need more control, you can use the function()...end notation
@@ -242,23 +243,55 @@ local config = {
       --   end,
       -- },
 
-      {
-        -- TODO: Doesn't highlight first match?
-        "ggandor/leap.nvim",
-        -- event = "BufRead",
-        config = function()
-          local leap = require('leap')
-          leap.opts.highlight_unlabled_phase_one_targets = true
-          leap.add_default_mappings()
-        end,
-      },
+      -- {
+      --   -- TODO: Doesn't highlight first match?
+      --   "ggandor/leap.nvim",
+      --   -- event = "BufRead",
+      --   config = function()
+      --     local leap = require('leap')
+      --     leap.opts.highlight_unlabled_phase_one_targets = true
+      --     leap.add_default_mappings()
+      --   end,
+      -- },
 
-      { "DanilaMihailov/beacon.nvim" },
+      { "DanilaMihailov/beacon.nvim" }, -- Highlights cursor when you jump a ways
+
+      { "kylechui/nvim-surround",
+          config = function()
+              require("nvim-surround").setup({
+                  -- Configuration here, or leave empty to use defaults
+              })
+          end,
+
+      },
 
       {
          "unisonweb/unison",
          branch = "trunk",
          rtp = "editor-support/vim",
+      },
+
+      {
+        "nvim-neorg/neorg",
+        run = ":Neorg sync-parsers", -- This is the important bit!
+        config = function()
+          require("neorg").setup {
+            load = {
+              ["core.defaults"] = {},
+              ["core.norg.concealer"] = {},
+              -- ["core.presenter"] = {}, -- needs a zen-mode listed
+              ["core.norg.dirman"] = {
+                config = {
+                  workspaces = {
+                    work = "~/notes/work",
+                    home = "~/notes/home",
+                  }
+                }
+              }
+            }
+            -- configuration here
+          }
+        end,
       },
 
       -- We also support a key value style plugin definition similar to NvChad:
